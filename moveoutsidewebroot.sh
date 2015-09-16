@@ -90,6 +90,7 @@ moveyesno(){
   read -r response
 response=${response,,}    # tolower
   if [[ $response !=  "y" && $response != "Y"  && $response != "yes" && $response != "Yes" ]]; then
+     echo -e "${red}User aborted script! Now exiting!${NC}"
     exit
   fi
 }
