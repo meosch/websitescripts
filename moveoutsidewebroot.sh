@@ -66,8 +66,8 @@ echo "the script once to for the initial setup."
 echo " "
 }
 areweinafolderwithdrupalwebroot(){
-if [ ! -f "${drupalrootpath}/index.php" ] ; then
-grep ${drupalrootpath}/[Dd]rupal index.php 2> /dev/null
+if [ ! -f "../${drupalrootpath}/index.php" ] ; then
+grep [Dd]rupal ../${drupalrootpath}/index.php 2> /dev/null
 if [ $? -ne 0 ]; then
 echo -e "Exiting, I did not find the ${red}Drupal index.php${NC} file."
 informuser
