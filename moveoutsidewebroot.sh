@@ -65,6 +65,12 @@ echo "distribution and / or a git repository. It is only need to run this"
 echo "the script once to for the initial setup."
 echo " "
 }
+setdrupalwebroot(){
+  if [ ! -n $drupalrootpath ] ; then
+  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+    drupalrootpath=$directoryrunfrom
+  fi
+}
 areweinafolderwithdrupalwebroot(){
 if [ ! -f "../${drupalrootpath}/index.php" ] ; then
 grep [Dd]rupal ../${drupalrootpath}/index.php 2> /dev/null
@@ -112,10 +118,12 @@ finished(){
 
 ### MAIN PROGRAMM ###
 
-if [ $yes = 1 ]; then 
+if [ $yes = 1 ]; then
+setdrupalwebroot
 areweinafolderwithdrupalwebroot
 moveandlink
 else
+setdrupalwebroot
 areweinafolderwithdrupalwebroot
 informuser
 notwhatyouwanted
