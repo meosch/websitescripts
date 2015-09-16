@@ -65,8 +65,6 @@ echo " "
 }
 setdrupalwebroot(){
   if [ -z $drupalrootpath ] ; then
-#  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-#    drupalrootpath=$directoryrunfrom
      drupalrootpath=$webroot
   fi
 }
