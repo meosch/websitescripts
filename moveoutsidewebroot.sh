@@ -3,9 +3,11 @@
 ### Moves the files we do not want to change outside our webroot folder. We link this back to their normal places each time we do a distribution rebuild in distro.rebuild.sh script.  It is only needed to run this script once before the first distribution rebuild.
 
 # What is our webroot folder called?  docroot? httpdocs? public_html?
-webroot="public_html"
-yes=0
+drupalrootpath="public_html"
 # END CONFIGURATION #############################
+# set yes to no ;)
+yes=0
+
 function usage()
 {
  echo "Usage ${0##*/}  -y -h <path>"
@@ -46,34 +48,26 @@ red='\e[1;31m'
 NC='\e[0m' # No Color
 pwd=$(pwd)
 
-
-switchdirctoryifgiven(){
-  if [ -n $drupalrootpath ] ; then
-    cd $drupalrootpath
-  else
-  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-    drupalrootpath=$directoryrunfrom
-    cd $drupalrootpath
-  fi
-}
-
 pause(){
    read -p "$*"
 }
 
 informuser(){
-echo "This script should be run from a Drupal webroot, but the"
-echo "directory to run from can be specified on the command line."
+echo "This script should be run from the scripts directory which is in"
+echo "the same folder with the  Drupal webroot folder."
+echo "The name of the Drupal webroot folder can be specified on the command line."
 echo "To see help use the -h switch."
-echo "This script will be run in $drupalrootpath"
-echo "This script will move download files (modules, libraries, themes)"
-echo "into the default Drupal folders site/all/"
-echo "from the profile location."
+echo "This Drupal webroot folder name is currently set to $drupalrootpath"
+echo "This script will move site specific files (.htaccess, robots.txt, sites)"
+echo "outside the Drupal webroot folders and then create links to them."
+echo "This is a helper script when setting up a new site with a Drupal"
+echo "distribution and / or a git repository. It is only need to run this"
+echo "the script once to for the initial setup."
 echo " "
 }
-areweinadrupalwebroot(){
+areweinafolderwithdrupalwebroot(){
 if [ ! -f index.php ] ; then
-grep [Dd]rupal index.php 2> /dev/null
+grep ${drupalrootpath}/[Dd]rupal index.php 2> /dev/null
 if [ $? -ne 0 ]; then
 echo -e "Exiting, I did not find the ${red}Drupal index.php${NC} file."
 informuser
@@ -89,24 +83,25 @@ echo " "
 }
 
 moveyesno(){
-  echo -e -n "Should I move the site specific files outside the webroot, ${webroot}? [y/N] "
+  echo -e -n "Should I move the site specific files outside the webroot, ${drupalrootpath}? [y/N] "
   read -r response
 response=${response,,}    # tolower
 }
 
-move(){
-
+moveandlink(){
 for movethis in ".htaccess" "robots.txt" "sites"
 do
-  if [ ! -L "../${webroot}/${movethis}" ]; then
-# Move files and folders outside webroot
+# Check if  the "file" is already a link. 
+  if [ ! -L "../${drupalrootpath}/${movethis}" ]; then
+# Move file or folder outside webroot
   	echo "Moving ${movethis} outside webroot"
-    mv ../${webroot}/${movethis} ../
-# Linking our files to their new locations
-    echo "Symlinking ${movethis} to ${webroot}/sites"
-    ln -s ../${movethis} ../${movethis}
+    mv ../${drupalrootpath}/${movethis} ../
+# Linking our file or folder to their new location
+    echo "Creating symlink for  ${movethis} in ${drupalrootpath}"
+    ln -st ../${drupalrootpath} ../${movethis}
   else
     echo "${movethis} is already a link and will not be moved or linked"
+  fi
 done
 
 
@@ -115,31 +110,16 @@ finished(){
   echo "All done moving files."
 }
 
+### MAIN PROGRAMM ###
 
-
-if [ ! -d "$webroot" ]; then
-  echo "Webroot - $webroot - does not exist!"
-  exit
+if [ $yes = 1 ]; then 
+areweinafolderwithdrupalwebroot
+moveandlink
+else
+areweinafolderwithdrupalwebroot
+informuser
+notwhatyouwanted
+moveyesno
+moveandlink
+finished
 fi
-
-# Move files and folders outside webroot
-echo "Moving .htaccess outside webroot"
-mv ../${webroot}/.htaccess ../
-echo "Moving robots.txt outside webroot"
-mv ../${webroot}/robots.txt ../
-echo "Moving sites folder outside webroot"
-mv ../${webroot}/sites ../
-
-
-
-# Linking our files to their new locations
-echo "Symlinking sites directory to ${webroot}/sites"
-cd ../${webroot}
-#rm -rf sites
-ln -s ../sites
-echo "Symlinking .htaccess ${webroot}/.htaccess"
-#rm .htaccess
-ln -s ../.htaccess
-echo "Symlinking robots.txt to ${webroot}/robots.txt"
-#rm robots.txt
-ln -s ../robots.txt
