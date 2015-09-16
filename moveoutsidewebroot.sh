@@ -66,7 +66,7 @@ echo "the script once to for the initial setup."
 echo " "
 }
 setdrupalwebroot(){
-  if [ ! -n $drupalrootpath ] ; then
+  if [ -n $drupalrootpath ] ; then
 #  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 #    drupalrootpath=$directoryrunfrom
      drupalrootpath=$webroot
