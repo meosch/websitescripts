@@ -58,13 +58,13 @@ echo "The name of the Drupal webroot folder name can be specified on the command
 echo -e "To see help use the ${red}-h${NC} switch."
 echo -e "The Drupal webroot folder name is currently set to ${red}$drupalrootpath${NC}"
 echo -e "This script will move site specific file and folders (${red}.htaccess, robots.txt, sites${NC}) outside the Drupal webroot folders and then create links to them."
-echo "This is a helper script when setting up a new site with a Drupal distribution and/or a git repository. "
+echo "This is a helper script to be used when setting up a new site with a Drupal distribution and/or a git repository. "
 echo "It is only need to run this script once for the initial setup."
 echo "If links are found instead of the files and folders to move, the script will assume you have run it before and not repeat the process."
 echo " "
 }
 setdrupalwebroot(){
-  if [ -n $drupalrootpath ] ; then
+  if [ -z $drupalrootpath ] ; then
 #  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 #    drupalrootpath=$directoryrunfrom
      drupalrootpath=$webroot
