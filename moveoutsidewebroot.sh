@@ -7,7 +7,7 @@ webroot="public_html"
 # END CONFIGURATION #############################
 # set yes to no ;)
 yes=0
-
+runningscriptname=$(basename "$0")
 function usage()
 {
  echo "Usage ${0##*/}  -y -h <path>"
@@ -53,7 +53,7 @@ pause(){
 }
 
 informuser(){
-echo -e "This script should be run from the ${red}scripts${NC} directory which is in the same folder with the Drupal webroot folder."
+echo -e "This script, ${red}${runningscriptname}${NC} should be run from the ${red}scripts${NC} directory which is in the same folder with the Drupal webroot folder."
 echo "The name of the Drupal webroot folder can be specified on the command line."
 echo -e "To see help use the ${red}-h${NC} switch."
 echo "This Drupal webroot folder name is currently set to $drupalrootpath"
