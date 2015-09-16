@@ -80,7 +80,7 @@ fi
 fi
 }
 notwhatyouwanted(){
-echo -e "If this is not what you want hit ${red}Ctrl + C${NC} to abort this script or press any key to continue."
+echo -e "If this is not what you want hit ${red}Ctrl + C${NC} to abort this script or press the ${red}Enter${NC} key to continue."
 pause
 echo " "
 }
