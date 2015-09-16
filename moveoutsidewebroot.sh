@@ -90,7 +90,7 @@ echo " "
 }
 
 moveyesno(){
-  echo -e -n "Should I move the site specific files outside the webroot, ${drupalrootpath}? [y/N] "
+  echo -e -n "Should I move the site specific files outside the webroot, ${red}${drupalrootpath}${NC}? ${red}[y/N]${NC} "
   read -r response
 response=${response,,}    # tolower
 }
@@ -101,13 +101,13 @@ do
 # Check if  the "file" is already a link. 
   if [ ! -L "../${drupalrootpath}/${movethis}" ]; then
 # Move file or folder outside webroot
-  	echo "Moving ${movethis} outside webroot"
+  	echo "Moving ${red}${movethis}${NC} outside webroot"
     mv ../${drupalrootpath}/${movethis} ../
 # Linking our file or folder to their new location
-    echo "Creating symlink for  ${movethis} in ${drupalrootpath}"
+    echo "Creating symlink for ${red}${movethis}${NC} in ${drupalrootpath}"
     ln -st ../${drupalrootpath} ../${movethis}
   else
-    echo "${movethis} is already a link and will not be moved or linked"
+    echo "${red}${movethis}${NC} is already a link and will not be moved or linked"
   fi
 done
 
