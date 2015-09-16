@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 ### Moves the files we do not want to change outside our webroot folder. We link this back to their normal places each time we do a distribution rebuild in distro.rebuild.sh script.  It is only needed to run this script once before the first distribution rebuild.
 
 # What is our webroot folder called?  docroot? httpdocs? public_html?
@@ -66,7 +66,7 @@ echo "the script once to for the initial setup."
 echo " "
 }
 areweinafolderwithdrupalwebroot(){
-if [ ! -f index.php ] ; then
+if [ ! -f "${drupalrootpath}/index.php" ] ; then
 grep ${drupalrootpath}/[Dd]rupal index.php 2> /dev/null
 if [ $? -ne 0 ]; then
 echo -e "Exiting, I did not find the ${red}Drupal index.php${NC} file."
