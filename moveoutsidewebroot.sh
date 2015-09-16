@@ -53,16 +53,13 @@ pause(){
 }
 
 informuser(){
-echo "This script should be run from the scripts directory which is in"
-echo "the same folder with the  Drupal webroot folder."
+echo -e "This script should be run from the ${red}scripts${NC} directory which is in the same folder with the Drupal webroot folder."
 echo "The name of the Drupal webroot folder can be specified on the command line."
-echo "To see help use the -h switch."
+echo -e "To see help use the ${red}-h${NC} switch."
 echo "This Drupal webroot folder name is currently set to $drupalrootpath"
-echo "This script will move site specific files (.htaccess, robots.txt, sites)"
-echo "outside the Drupal webroot folders and then create links to them."
-echo "This is a helper script when setting up a new site with a Drupal"
-echo "distribution and / or a git repository. It is only need to run this"
-echo "the script once to for the initial setup."
+echo -e "This script will move site specific files (${red}.htaccess, robots.txt, sites${NC}) outside the Drupal webroot folders and then create links to them."
+echo "This is a helper script when setting up a new site with a Drupal distribution and/or a git repository. "
+echo "It is only need to run this script once for the initial setup."
 echo " "
 }
 setdrupalwebroot(){
