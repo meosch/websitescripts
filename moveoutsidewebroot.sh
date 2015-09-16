@@ -101,6 +101,7 @@ do
 # Check if  the "file" is already a link. 
   if [ ! -L "../${drupalrootpath}/${movethis}" ]; then
 # Move file or folder outside webroot
+    echo ""
   	echo "Moving ${red}${movethis}${NC} outside webroot"
     mv ../${drupalrootpath}/${movethis} ../
 # Linking our file or folder to their new location
