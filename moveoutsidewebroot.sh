@@ -98,13 +98,13 @@ do
   if [ ! -L "../${drupalrootpath}/${movethis}" ]; then
 # Move file or folder outside webroot
     echo ""
-  	echo "Moving ${red}${movethis}${NC} outside webroot"
+  	echo -e "Moving ${red}${movethis}${NC} outside webroot"
     mv ../${drupalrootpath}/${movethis} ../
 # Linking our file or folder to their new location
-    echo "Creating symlink for ${red}${movethis}${NC} in ${drupalrootpath}"
+    echo -e "Creating symlink for ${red}${movethis}${NC} in ${drupalrootpath}"
     ln -st ../${drupalrootpath} ../${movethis}
   else
-    echo "${red}${movethis}${NC} is already a link and will not be moved or linked"
+    echo -e "${red}${movethis}${NC} is already a link and will not be moved or linked"
   fi
 done
 
