@@ -89,6 +89,9 @@ moveyesno(){
   echo -e -n "Should I move the site specific files outside the webroot, ${red}${drupalrootpath}${NC}? ${red}[y/N]${NC} "
   read -r response
 response=${response,,}    # tolower
+  if [[ $response !=  "y" && $response != "Y"  && $response != "yes" && $response != "Yes" ]]; then
+    exit
+  fi
 }
 
 moveandlink(){
