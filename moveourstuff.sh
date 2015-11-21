@@ -20,6 +20,8 @@
 # These variables will be used to create the path is the following way:
 # profiles/$distroname/modules, themes, or libraries/$ourstufffolder/
 # 20150521 - FJH Frederick Henderson
+PS4=':${LINENO} + '
+#set -x
 
 distroname="wetkit"
 ourstufffolder="meos"
@@ -67,11 +69,10 @@ pwd=$(pwd)
 
 
 switchdirctoryifgiven(){
-  if [ -n $drupalrootpath ] ; then
+  if [ ! -z $drupalrootpath ] ; then
     cd $drupalrootpath
   else
-  directoryrunfrom=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-    drupalrootpath=$directoryrunfrom
+     drupalrootpath=$pwd
     cd $drupalrootpath
   fi
 }
@@ -92,8 +93,8 @@ echo " "
 }
 areweinadrupalwebroot(){
 if [ ! -f index.php ] ; then
-grep [Dd]rupal index.php 2> /dev/null
-if [ $? -ne 0 ]; then
+result=$(grep -c [Dd]rupal index.php | wc -l 2> /dev/null )
+if [ ! $result -gt 0 ]; then
 echo -e "Exiting, I did not find the ${red}Drupal index.php${NC} file."
 informuser
 echo "Nothing more to do, exiting. Bye!"
@@ -114,14 +115,14 @@ response=${response,,}    # tolower
 }
 
 move(){
-ourmodulespath=profiles/$distroname/modules/$ourstufffolder/
-ourthemespath=profiles/$distroname/themes/$ourstufffolder/
-ourlibrariespath=profiles/$distroname/libraries/$ourstufffolder/
+ourmodulespath=${drupalrootpath}/profiles/$distroname/modules/$ourstufffolder/*
+ourthemespath=${drupalrootpath}/profiles/$distroname/themes/$ourstufffolder/*
+ourlibrariespath=${drupalrootpath}/profiles/$distroname/libraries/$ourstufffolder/*
 if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Modules
   if [ -d  $ourmodulespath ]; then
     echo "Moving modules . . ."
-    mv ${ourmodulespath}*  sites/all/modules/
+    mv ${ourmodulespath}  sites/all/modules/contrib/
   else
     echo "No modules found, skipping!"
   fi
@@ -129,7 +130,7 @@ if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Themes
   if [ -d  $ourthemespath ]; then
     echo "Moving themes . . ."
-    mv ${ourthemespath}*  sites/all/themes/
+    mv ${ourthemespath}  sites/all/themes/
   else
     echo "No themes found, skipping!"
   fi
@@ -137,7 +138,7 @@ if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Libraries
   if [ -d  $ourlibrariespath ]; then
     echo "Moving libraries . . ."
-    mv ${ourlibrariespath}*  sites/all/libraries/
+    mv ${ourlibrariespath}  sites/all/libraries/
   else
     echo "No libraries found, skipping!"
   fi
