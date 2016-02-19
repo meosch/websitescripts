@@ -1,23 +1,29 @@
 #! /bin/bash
-# Move the Modules, Libraries and Themes that we downloaded with the 
-# Wetkit distribution into the normal Drupal directories, as we do not 
+# Move the Modules, Libraries and Themes that we downloaded with the
+# Wetkit distribution into the normal Drupal directories, as we do not
 # want to manage them with the Wetkit profile.
 #
-# We are forced to do it this way so that the modules can be enabled later during the installation. The profile will only download the files into its subdirectories. However if we make a separate make file the wetkit install will abort as the dependencies files are missing. So instead we download them with the wetkit files in their own meos subdirectories then move them to the default install locations in /sites/all/.  20150521 FJH
-
-# Change the variables below to match your situation. 
+# We are forced to do it this way so that the modules can be enabled
+# later during the installation. The profile will only download the
+# files into its subdirectories. However if we make a separate make
+# file the wetkit install will abort as the dependencies files are
+# missing. So instead we download them with the wetkit files in their
+# own meos subdirectories then move them to the default install
+# locations in /sites/all/.  20150521 FJH
+#
+# Change the variables below to match your situation.
 # $distroname should be the same as the distribution machine name.
 # This will be the name of the folder in the profiles directory.
-# $ourstufffolder is the name of the subfolder that you will put your 
+# $ourstufffolder is the name of the subfolder that you will put your
 # modules, themes and libraries into so that they can be copied.
 # You should do this in your .make file like this:
 # projects[project_name][subdir] = "ourstufffolder/contrib"
-# where ourstufffolder is the name of the subfolder that your 
+# where ourstufffolder is the name of the subfolder that your
 # non-profile  modules or themes will land in.
 # Libraries are a little different and look like this:
 # libraries[library_name][destination] = "libraries/ourstufffolder/library_name"
 # Replace project_name and library_name with the name of the project you are adding.
-# These variables will be used to create the path is the following way:
+# These variables will be used to create the path in the following way:
 # profiles/$distroname/modules, themes, or libraries/$ourstufffolder/
 # 20150521 - FJH Frederick Henderson
 PS4=':${LINENO} + '
@@ -115,14 +121,15 @@ response=${response,,}    # tolower
 }
 
 move(){
-ourmodulespath=${drupalrootpath}/profiles/$distroname/modules/$ourstufffolder/*
-ourthemespath=${drupalrootpath}/profiles/$distroname/themes/$ourstufffolder/*
-ourlibrariespath=${drupalrootpath}/profiles/$distroname/libraries/$ourstufffolder/*
+ourmodulespath=${drupalrootpath}/profiles/$distroname/modules/$ourstufffolder
+ourthemespath=${drupalrootpath}/profiles/$distroname/themes/$ourstufffolder
+ourlibrariespath=${drupalrootpath}/profiles/$distroname/libraries/$ourstufffolder
 if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Modules
   if [ -d  $ourmodulespath ]; then
     echo "Moving modules . . ."
-    mv ${ourmodulespath}  sites/all/modules/contrib/
+    cp -RT ${ourmodulespath}/  sites/all/modules/
+    rm -rf ${ourmodulespath}/
   else
     echo "No modules found, skipping!"
   fi
@@ -130,7 +137,8 @@ if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Themes
   if [ -d  $ourthemespath ]; then
     echo "Moving themes . . ."
-    mv ${ourthemespath}  sites/all/themes/
+    cp -RT ${ourthemespath}/  sites/all/themes/
+    rm -rf ${ourthemespath}/
   else
     echo "No themes found, skipping!"
   fi
@@ -138,7 +146,8 @@ if [[ $response =~ ^(yes|y)$ || $yes = 1 ]]; then
   # Libraries
   if [ -d  $ourlibrariespath ]; then
     echo "Moving libraries . . ."
-    mv ${ourlibrariespath}  sites/all/libraries/
+    cp -RT ${ourlibrariespath}/  sites/all/libraries/
+    rm -rf ${ourlibrariespath}/
   else
     echo "No libraries found, skipping!"
   fi
@@ -152,7 +161,7 @@ finished(){
 
 ### MAIN PROGRAMM ###
 
-if [ $yes = 1 ]; then 
+if [ $yes = 1 ]; then
 switchdirctoryifgiven
 areweinadrupalwebroot
 move
@@ -165,7 +174,3 @@ moveyesno
 move
 finished
 fi
-
-
-
-
